@@ -1,0 +1,71 @@
+const express=require("express")
+const router=express.Router();
+const sinfo=require('../models/s')
+//get all id
+router.get('/',async(req,res)=>{
+    try{
+        const subt=await sinfo.find()
+        res.json(subt);
+    }
+    catch(error){
+res.status(500).json({message:error.message})
+    }
+}) 
+// get single id
+router.get('/:id',gets,(req,res)=>{
+    res.json(res.snew)
+})
+//create one
+router.post('/',async(req,res)=>{
+    const snew=new sinfo({
+        name:req.body.name,
+        phoneno:req.body.phoneno
+    })
+    try{
+        const sn=await snew.save()
+        res.status(201).json(snew)
+    }
+    catch(err){
+        res.status(400).json({message:err.message})
+    }
+})
+
+//update
+router.patch('/:id',gets,async(req,res)=>{
+    if(req.body.name!=null){
+        res.snew.name=req.body.name
+    }
+    try{
+        const supdate=await res.snew.save()
+        res.json(supdate)
+    }
+    catch(err){
+        res.status(400).json({message:err.message})
+    }
+})
+//delete
+router.delete('/:id',gets,async(req,res)=>{
+    try{
+        await res.snew.remove()
+        res.json({message:"deleted"})
+    }catch(err){
+        res.status.json({message:err.message})
+    }
+})
+
+async function gets(req,res,next){    
+    let snew
+    try{
+        snew=await sinfo.findById(req.params.id)
+        if(snew==null){
+            res.status(404).json({message:"name not found"})
+        }
+    }
+    catch(err){
+        res.status(500).json({message:err.message})
+    }
+    res.snew=snew
+    next()
+}
+
+module.exports=router
